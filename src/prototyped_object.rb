@@ -5,4 +5,8 @@ class PrototypedObject
     self.send "#{name}=", value
   end
 
+  def set_method(selector, code)
+   self.class.define_method selector do code end
+  end
+
   end
