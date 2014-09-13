@@ -44,4 +44,12 @@ describe 'Add Method' do
     expect(guerrero.respond_to? :atacar_a).to eq true
   end
 
+  it 'agregar un metodo solo lo agrega a ese prototipo' do
+    conComportamiento = PrototypedObject.new
+    conComportamiento.set_method :energia, proc{20}
+    expect(conComportamiento.respond_to? :energia).to eq true
+
+    sinComportamiento = PrototypedObject.new
+    expect(sinComportamiento.respond_to? :energia).to eq false
+  end
 end

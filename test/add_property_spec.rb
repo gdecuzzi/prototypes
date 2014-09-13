@@ -28,4 +28,13 @@ describe 'Add Property' do
     expect(guerrero.energia).to eq(50)
   end
 
+  it 'agregar una propiedad solo la agrega a ese prototipo' do
+    conPropiedad = PrototypedObject.new
+    conPropiedad.set_property :energia, 10
+    expect(conPropiedad.respond_to? :energia).to eq true
+
+    sinPropiedad = PrototypedObject.new
+    expect(sinPropiedad.respond_to? :energia).to eq false
+  end
+
 end
