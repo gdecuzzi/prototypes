@@ -6,7 +6,7 @@ class PrototypedObject
   end
 
   def set_method(selector, code)
-   self.class.define_method selector do code end
+   self.class.send :define_method, selector, code
   end
 
   end
