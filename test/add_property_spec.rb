@@ -6,7 +6,7 @@ describe 'Add Property' do
   it 'agregar una propiedad entiende el getter' do
     guerrero = PrototypedObject.new
     guerrero.set_property(:energia, 100)
-    expect {guerrero.energia}.to_not raise_error
+    expect(guerrero.respond_to? :energia).to eq true
   end
 
   it 'agregar una propiedad con valor la inicializa' do
