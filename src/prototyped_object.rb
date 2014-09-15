@@ -16,7 +16,14 @@ class PrototypedObject
 
   def method_missing(selector, *arguments, &block)
     if(@parent != nil?)
-      @parent.send selector
+      if(arguments.empty?)
+        eval("@parent.#{selector}", binding)
+      else
+        @arg = arguments[0]
+        eval("@parent.#{selector} #{@arg}", binding)
+      end
+
+
     else
       super.method_missing selector, arguments
     end

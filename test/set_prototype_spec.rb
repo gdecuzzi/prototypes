@@ -22,4 +22,42 @@ describe 'Define prototype for an object' do
     expect(parent.respond_to? :no_definido).to eq false
     expect{parent.no_definido}.to raise_exception
   end
+
+  it 'definir proptotipo a un objeto con propiedad hace que entienda el getter' do
+    parent = PrototypedObject.new
+    parent.set_property :energia,20
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+
+    expect(child.respond_to? :energia).to eq true
+    expect(child.energia).to eq 20
+  end
+
+
+  it 'definir proptotipo a un objeto con propiedad hace que entienda el setter' do
+    parent = PrototypedObject.new
+    parent.set_property :energia,20
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+    child.energia = 100
+
+    expect(child.energia).to eq 100
+  end
+
+
+  it 'settear valor de propiedad al child no altera al valor del parent' do
+    parent = PrototypedObject.new
+    parent.set_property :energia,20
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+    child.energia = 100
+
+    expect(child.energia).to eq 100
+    expect(parent.energia).to eq 20
+  end
+
+
 end
