@@ -1,3 +1,4 @@
+
 class PrototypedObject
 
   def set_property(name, value)
@@ -6,11 +7,23 @@ class PrototypedObject
   end
 
   def set_method(selector, code)
-   self.singleton_class.send :define_method, selector, code
+    self.singleton_class.send :define_method, selector, code
   end
 
   def set_prototype(aPrototype)
-    #self.class.superclass = aPrototype.class
+    @parent = aPrototype
   end
 
+  def method_missing(selector, *arguments, &block)
+    if(@parent != nil?)
+      @parent.send selector
+    else
+      super.method_missing selector, arguments
+    end
   end
+
+  def respond_to_missing?(method_name, include_private = false)
+    (@parent != nil && (@parent.respond_to? method_name))|| (super method_name, include_private)
+  end
+
+end
