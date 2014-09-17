@@ -1,4 +1,4 @@
-class PrototypedObject
+module Prototyped
   def initialize
     @allBehavior = Hash.new
     @variables = Array.new
@@ -57,5 +57,13 @@ class PrototypedObject
 
     self.set_property name, nil
   end
+
+
+end
+
+class PrototypedObject
+  include Prototyped
+
+
 
 end
