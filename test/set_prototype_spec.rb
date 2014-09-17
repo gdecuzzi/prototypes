@@ -150,5 +150,15 @@ describe 'Define prototype for an object' do
     expect(child.secret_of_life).to eq 1000
   end
 
+  it 'si el parent no entiende y el child no lo define, entonces el child no entiende el mensaje' do
+    parent = PrototypedObject.new
+    parent.set_method :secret_of_life, proc{42}
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+
+    expect{child.not_present_there}.to raise_error
+  end
+
 
 end

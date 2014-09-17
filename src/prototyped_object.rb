@@ -1,30 +1,25 @@
 module Prototyped
   def initialize
     @allBehavior = Hash.new
-    @variables = Array.new
     super
   end
 
   def set_property(name, value)
-    @variables << name
-
     self.singleton_class.send :attr_accessor, name
     self.send "#{name}=", value
   end
 
   def set_method(selector, code)
     self.singleton_class.send :define_method, selector, code
-
     @allBehavior.store selector, code
-  end
-
-  def variables()
-    @variables
   end
 
   def set_prototype(aPrototype)
     @parent = aPrototype
+  end
 
+  def respond_to_missing?(method_name, include_private = true)
+    (@parent != nil && (@parent.respond_to? method_name)) || (super method_name, include_private)
   end
 
   def method_missing(selector, *arguments, &block)
@@ -39,10 +34,6 @@ module Prototyped
       create_parent_property selector, !arguments.empty?
       self.send selector, *arguments
     end
-  end
-
-  def respond_to_missing?(method_name, include_private = true)
-    (@parent != nil && (@parent.respond_to? method_name)) || (super method_name, include_private)
   end
 
   def obtain_proc(selector)
