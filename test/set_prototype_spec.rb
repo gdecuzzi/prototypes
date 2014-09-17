@@ -138,5 +138,17 @@ describe 'Define prototype for an object' do
     expect(child.one_more).to eq 43
   end
 
+  it 'si el child redefine el mensaje del parent se pefiere el del child' do
+    parent = PrototypedObject.new
+    parent.set_method :secret_of_life, proc{42}
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+
+    parent.set_method :secret_of_life, proc{1000}
+
+    expect(child.secret_of_life).to eq 1000
+  end
+
 
 end
