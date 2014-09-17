@@ -125,5 +125,18 @@ describe 'Define prototype for an object' do
     expect(guerrero.energia).to eq(80)
   end
 
+  it 'agregar mensaje al parent hace que lo entienda el child' do
+    parent = PrototypedObject.new
+    parent.set_method :secret_of_life, proc{42}
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+
+    parent.set_method :one_more, proc{43}
+
+    expect(child.respond_to? :one_more).to eq true
+    expect(child.one_more).to eq 43
+  end
+
 
 end
