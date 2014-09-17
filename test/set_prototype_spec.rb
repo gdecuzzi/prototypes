@@ -59,5 +59,71 @@ describe 'Define prototype for an object' do
     expect(parent.energia).to eq 20
   end
 
+  it 'settear valor de propiedad al child mantiene al estado' do
+    parent = PrototypedObject.new
+    parent.set_property :energia,20
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+    child.energia = 100
+    child.energia = child.energia + 10
+
+    expect(child.energia).to eq 110
+    expect(parent.energia).to eq 20
+  end
+
+  it 'usar la propiedad dentro de un metodo del child altera el estado del child' do
+    parent = PrototypedObject.new
+    parent.set_property :energia,20
+
+    child = PrototypedObject.new
+    child.set_prototype parent
+    child.energia= 100
+    child.set_method :vola, proc{ self.energia= self.energia - 10}
+    child.vola
+
+    expect(child.energia).to eq 90
+    expect(parent.energia).to eq 20
+  end
+
+  it 'enviar mensaje con parametros que viene de un parent envia los parametros' do
+    parent = PrototypedObject.new
+    parent.set_method :expecting_param, proc { |should_not_be_nil|
+      if should_not_be_nil == nil
+        raise_exception 'Should not be nil'
+      end
+      should_not_be_nil
+    }
+    child = PrototypedObject.new
+    child.set_prototype parent
+
+    expect(child.expecting_param 'Success').to eq 'Success'
+  end
+
+  it 'ejemplo del enunciado funcina' do
+    guerrero = PrototypedObject.new
+    guerrero.set_property :energia, 100
+    guerrero.set_property :potencial_defensivo, 10
+    guerrero.set_property :potencial_ofensivo, 30
+    guerrero.set_method(:atacar_a,
+                      proc {
+                          |otro_guerrero|
+                        if(otro_guerrero.potencial_defensivo < self.potencial_ofensivo)
+                          otro_guerrero.recibe_danio(self.potencial_ofensivo - otro_guerrero.potencial_defensivo)
+                        end
+                      })
+    guerrero.set_method(:recibe_danio, proc {|cantidad| self.energia = self.energia - cantidad})
+    espadachin = PrototypedObject.new
+    espadachin.set_prototype(guerrero)
+
+    espadachin.set_property(:habilidad, 0.5)
+    espadachin.set_property(:potencial_espada, 30)
+    espadachin.energia = 200
+    espadachin.potencial_ofensivo=30
+
+    espadachin.atacar_a(guerrero)
+    expect(guerrero.energia).to eq(80)
+  end
+
 
 end
