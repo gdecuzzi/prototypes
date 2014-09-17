@@ -31,7 +31,7 @@ describe 'Define prototype for an object' do
     child.set_prototype parent
 
     expect(child.respond_to? :energia).to eq true
-    expect(child.energia).to eq 20
+    expect(child.energia).to eq nil
   end
 
 
