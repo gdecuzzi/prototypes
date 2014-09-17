@@ -26,10 +26,15 @@ module Prototyped
     if(@parent == nil || @parent.method(selector) == nil)
       return super.method_missing selector, arguments #FIXME tirar el DNU de ruby
     end
-
-    @code = @parent.obtain_proc selector
-    if @code != nil
-      self.instance_exec(*arguments, &@code)
+    #uggly... i would love something like:
+    #myMethod = @parent.singleton_class.instance_method selector
+    #myMethod.bind(self)
+    #myMethod.call *arguments
+    #but: TypeError: singleton method called for a different object
+    
+    code = @parent.obtain_proc selector
+    if code != nil
+      self.instance_exec(*arguments, &code)
     else #houston we have a property accesses
       create_parent_property selector, !arguments.empty?
       self.send selector, *arguments
@@ -54,7 +59,6 @@ end
 
 class PrototypedObject
   include Prototyped
-
 
 
 end
