@@ -1,6 +1,6 @@
 class PrototypedConstructor
 
-  def nuevo_constructor *args
+  def self.new *args
     if(args.size == 2)
       constructor = ConstructorWithInitializations.new
       constructor.prototype = args[0]
@@ -13,6 +13,11 @@ class PrototypedConstructor
     end
   end
 
+  def self.copy(original)
+    constructor = ConstructorAsCopy.new
+    constructor.prototype = original
+    constructor
+  end
 
 
 end
@@ -22,7 +27,8 @@ class ConstructorWithInitializations
   attr_accessor :initializations
 
   def new *args
-    instance = prototype.clone
+    instance = PrototypedObject.new
+    instance.set_prototype prototype
 
     params = []
     params << instance
@@ -37,10 +43,22 @@ class ConstructorOnlyPrototype
   attr_accessor :prototype
 
   def new initializations
-    instance = prototype.clone
+    instance = PrototypedObject.new
+    instance.set_prototype prototype
+
     initializations.each { |key, value|
       instance.send "#{key}=", value
     }
+    instance
+  end
+end
+
+class ConstructorAsCopy
+  attr_accessor :prototype
+
+  def new
+    instance = PrototypedObject.new
+    instance.set_prototype prototype
     instance
   end
 end
