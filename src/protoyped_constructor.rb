@@ -57,8 +57,6 @@ class ConstructorAsCopy
   attr_accessor :prototype
 
   def new
-    instance = PrototypedObject.new
-    instance.set_prototype prototype
-    instance
+    prototype.clone
   end
 end

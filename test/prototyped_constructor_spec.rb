@@ -41,7 +41,9 @@ describe 'Crear un prototipo con vitaminas' do
 
     Guerrero = PrototypedConstructor.copy(guerrero)
     un_guerrero = Guerrero.new
-    expect(un_guerrero.potencial_defensivo).to eq(10)
+    expect(un_guerrero.potencial_defensivo).to eq(30)
+    expect(un_guerrero.potencial_ofensivo).to eq(10)
+    expect(un_guerrero.energia).to eq(100)
   end
 
 end
